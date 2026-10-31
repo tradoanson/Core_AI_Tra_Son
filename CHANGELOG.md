@@ -127,3 +127,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.5.0] — Recovery Anchor
 - Independent signed audit-head anchor with explicit truncation verification.
+
+## [1.6.0] — Performance Probe
+- Bounded offline reasoning latency budget measurements.
