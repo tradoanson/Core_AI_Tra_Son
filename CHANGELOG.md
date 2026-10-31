@@ -57,3 +57,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Detect contradictory march availability/capacity signals and fail closed.
 - Add synthetic benchmark agreement by confidence bin, repeatability and parallel stability tests.
 - Confidence is not probabilistically calibrated; no host actions or production integration.
+
+## [0.5.0] — Advanced Reasoning (2026-10-31)
+- Add deterministic comparison and ranking of allowlisted human-review alternatives with reason codes and fixed policy scores.
+- Fail closed on contradictory/unverified signals, unknown options and missing return context.
+- 15 new ranking tests; GitHub-only 3-version acceptance; SHADOW only.
