@@ -121,3 +121,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.3.0] — Drift Advisory
 - Verified-outcome drift monitor with conservative pause recommendation.
+
+## [1.4.0] — Explainability
+- Structured decision reasons and explicitly uncalibrated confidence.
