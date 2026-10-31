@@ -1,0 +1,71 @@
+name: v0.6.1 learning integrity acceptance (GitHub only)
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/v0.6.1-learning-integrity'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-acceptance:
+    name: install, tests, static safety / Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Validate source and package
+        run: |
+          test -f pyproject.toml
+          test -d core_ai_tra_son
+          test -d tests
+      - name: Build isolated environment and install local source
+        run: |
+          python -m venv .acceptance-venv
+          .acceptance-venv/bin/python -m pip install --disable-pip-version-check 'setuptools>=68'
+          .acceptance-venv/bin/python -m pip install --no-deps --no-build-isolation -e .
+      - name: Execute installed package outside repository
+        run: |
+          cd /tmp
+          "$GITHUB_WORKSPACE/.acceptance-venv/bin/python" "$GITHUB_WORKSPACE/scripts/release_smoke.py"
+      - name: Execute all tests and forbid zero tests
+        run: |
+          .acceptance-venv/bin/python - <<'PY'
+          import unittest
+          suite = unittest.defaultTestLoader.discover("tests", pattern="test_*.py")
+          n = suite.countTestCases()
+          print(f"Discovered {n} tests")
+          if n < 160:
+              raise SystemExit(f"FAIL: expected >=160, found {n}")
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful():
+              raise SystemExit(1)
+          PY
+      - name: Verify original v0.1.0 files remain available
+        run: |
+          for f in README.md engine.py adaptive.py tiny_ai.py test_core.py Core_AI_Tra_Son_v0.1.0.zip; do
+            test -f "$f"
+          done
+      - name: Inspect tracked filenames for sensitive material
+        run: |
+          python - <<'PY'
+          import subprocess
+          names = subprocess.check_output(["git", "ls-files"], text=True).splitlines()
+          forbidden = (".env", ".pem", ".key", ".p12", ".pfx", "credentials.json", "id_rsa", ".sqlite3", ".db")
+          exceptions = {"Core_AI_Tra_Son_v0.1.0.zip"}
+          bad = [n for n in names if n not in exceptions and (n.endswith(forbidden) or n.split("/")[-1] in forbidden)]
+          if bad:
+              raise SystemExit(f"Forbidden tracked files: {bad}")
+          print("Filename scan PASS; not a full secret scan")
+          PY

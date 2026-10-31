@@ -72,3 +72,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Add immutable, caller-owned verified-outcome preference state with bounded updates for REVIEW_GATHER and REVIEW_RETURN.
 - Integrate learned adjustments only after existing SHADOW safety and eligibility gates; WAIT and blocked options remain unchanged.
 - Add 19 verified-only, saturation, isolation, concurrency and non-execution tests; GitHub-only acceptance.
+
+## [0.6.1] — Learning Integrity & Persistence (2026-10-31)
+- Explicit isolated SQLite verified-outcome ledger with transactional deduplication and hash-linked replay validation.
+- Consistent backup and fail-closed restore to absent target; reject corrupt, conflicting or unrecognized data.
+- 20 persistence/integrity tests and Python 3.11–3.13 GitHub-only acceptance; SHADOW only.
