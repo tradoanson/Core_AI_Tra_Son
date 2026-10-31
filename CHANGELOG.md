@@ -170,3 +170,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [2.9.0] — Release Candidate
 - Fail-closed release evidence gate; Windows PyInstaller EXE artifact CI build (subject to acceptance).
+
+## [3.0.0] — Standalone SHADOW Release
+- Packaged Windows EXE headless self-test in CI, GUI viewer version update, offline synthetic safety boundaries.
