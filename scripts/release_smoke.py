@@ -91,3 +91,22 @@ with tempfile.TemporaryDirectory() as directory:
     assert store.verify_evaluation()["report"]["status"] == "DEGRADED"
     store.activate_rollback(DecisionLearningState())
     assert store.effective_state() == DecisionLearningState()
+
+from core_ai_tra_son.trusted_evaluation import TrustedEvaluationStore, issue_provenance, approve_rollback
+with tempfile.TemporaryDirectory() as directory:
+    root = Path(directory)
+    trusted = TrustedEvaluationStore(root/"ledger.sqlite3", root/"anchor.json", b"l"*32,
+                  root/"evaluation.json", root/"rollback.json", issuer_key=b"i"*32, approver_key=b"a"*32)
+    trusted.initialize()
+    trusted.bootstrap()
+    for i in range(4):
+        trusted.observe("train_g"+str(i), "REVIEW_GATHER", successful=True, verified=True)
+        trusted.observe("train_r"+str(i), "REVIEW_RETURN", successful=False, verified=True)
+    cases = [DecisionCase("holdout"+str(i), {"march_available":2, "resource_available":True,
+            "eta_seconds":100, "return_buffer_seconds":300}, "REVIEW_RETURN") for i in range(8)]
+    proof = issue_provenance(cases, issuer_id="external-issuer", issuer_key=b"i"*32)
+    assert trusted.evaluate_trusted(cases, proof).status == "DEGRADED"
+    request = trusted.rollback_request(0)
+    approval = approve_rollback(request, approver_id="external-approver", approver_key=b"a"*32)
+    assert trusted.activate_trusted_rollback(request, approval) == DecisionLearningState()
+    assert trusted.effective_state() == DecisionLearningState()
