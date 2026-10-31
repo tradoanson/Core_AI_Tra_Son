@@ -99,3 +99,6 @@ All releases are append-only records. Never rewrite historical release sections.
 - HMAC-sign create-only evaluation summary bound to ledger head and count; no raw signals persisted.
 - Persist non-destructive, authenticated rollback selection override and freeze further learning.
 - Add 25 synthetic integrity/rollback tests; SHADOW only.
+
+## [0.7.3] — Recovery Governance
+- Explicit manual lifecycle gates; no automatic unfreeze or host action.
