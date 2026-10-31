@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "0.6.0"
+assert version("core-ai-tra-son") == "0.6.1"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -34,3 +34,13 @@ learned = learner.observe(original, "REVIEW_GATHER", successful=True, verified=T
 assert learned.gather_adjustment > 0 and original.gather_adjustment == 0
 shadow = AdvancedReasoner().rank({"march_available": 0}, verified=True, options=["WAIT", "REVIEW_GATHER"], learning_state=learned)
 assert shadow.selected == "WAIT" and shadow.action_executed is False
+
+import tempfile
+from pathlib import Path
+from core_ai_tra_son.learning_store import LearningStore
+with tempfile.TemporaryDirectory() as directory:
+    ledger = LearningStore(Path(directory) / "shadow.sqlite3")
+    ledger.initialize()
+    assert ledger.observe("smoke1", "REVIEW_GATHER", successful=True, verified=True)
+    assert not ledger.observe("smoke1", "REVIEW_GATHER", successful=True, verified=True)
+    assert ledger.state().gather_samples == 1
