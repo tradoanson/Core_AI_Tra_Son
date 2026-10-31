@@ -1,6 +1,6 @@
 # v0.6.3 — Learning Recovery & Concurrency Hardening
 
-Status: PENDING GitHub Actions CI and merge verification.
+Status: CI PASS on branch (Python 3.11, 3.12, 3.13); merge pending.\n\nCI evidence: https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41200282252\nVersioned verification: https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41200282310
 
 Scope: POSIX flock sidecar for cross-process serialized checkpoint publication, SQLite transactional dedup, post-commit crash suffix reconciliation before next write, directory fsync for checkpoint rename, symlink lock rejection, bounded synthetic performance smoke.
 
