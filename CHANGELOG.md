@@ -115,3 +115,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.1.0] — Windows Reliability
 - Opt-in Windows native byte-range lock and crash-reconciliation learning store; Windows CI.
+
+## [1.2.0] — Holdout Leakage
+- Conservative structural cross-split leakage audit for offline evaluation.
