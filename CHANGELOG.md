@@ -105,3 +105,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [0.8.0] — Recovery Audit
 - Signed, caller-persisted audit chain for manual recovery governance.
+
+## [0.9.0] — Quality Gates
+- Conservative exact paired sign-test gate on synthetic holdout improvements and regressions.
