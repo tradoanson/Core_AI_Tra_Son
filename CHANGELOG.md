@@ -102,3 +102,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [0.7.3] — Recovery Governance
 - Explicit manual lifecycle gates; no automatic unfreeze or host action.
+
+## [0.8.0] — Recovery Audit
+- Signed, caller-persisted audit chain for manual recovery governance.
