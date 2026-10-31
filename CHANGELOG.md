@@ -37,3 +37,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Consistent integrity-checked SQLite online backup; refuses overwrite; recovery validates backup and restores only to absent target.
 - Corrupt source/backup fails closed; no automatic destructive recovery. Ten resilience tests, 3-version CI, recovery guide and acceptance record.
 - Production machine tests and Micro Agent Engine deliberately out of scope.
+
+## [0.3.0] — Micro Agent Engine (2026-10-31)
+- Add pure SHADOW Observer -> Memory context -> CoreAI Reasoner -> Safety Gate -> structured decision result.
+- No host actions, network, persistent logs or citizen-record output. Twelve micro-agent tests, clean-install and Python 3.11–3.13 CI.
+- Production integration and Micro Agent execution explicitly excluded.
