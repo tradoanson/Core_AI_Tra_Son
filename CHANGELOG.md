@@ -67,3 +67,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Block gather review without explicitly verified resource availability and return review when resources are explicitly unavailable.
 - Improve ranked-option explanations; test boundary, adversarial, missing-signal and concurrent decision cases.
 - GitHub-only Python 3.11–3.13 acceptance; SHADOW only.
+
+## [0.6.0] — Adaptive Decision Learning (2026-10-31)
+- Add immutable, caller-owned verified-outcome preference state with bounded updates for REVIEW_GATHER and REVIEW_RETURN.
+- Integrate learned adjustments only after existing SHADOW safety and eligibility gates; WAIT and blocked options remain unchanged.
+- Add 19 verified-only, saturation, isolation, concurrency and non-execution tests; GitHub-only acceptance.
