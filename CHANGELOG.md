@@ -82,3 +82,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Add optional HMAC-SHA256 external checkpoint and anchored rollback detection with caller-managed key.
 - Add incremental suffix replay and explicit crash reconciliation without relaxing SHADOW safety gates.
 - Add 25 synthetic security, concurrency, recovery and compatibility tests on GitHub Actions.
+
+## [0.6.3] — Learning Recovery & Concurrency Hardening (2026-10-31)
+- Add opt-in POSIX multi-process lock and durable checkpoint directory fsync.
+- Validate and reconcile post-crash suffix before new writes; protect against stale checkpoint publication.
+- Add 19 synthetic multi-process, failure, integrity and bounded growth tests; SHADOW only.
