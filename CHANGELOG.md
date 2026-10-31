@@ -1,0 +1,21 @@
+# CHANGELOG — Core AI Trà Sơn
+
+All releases are append-only records. Never rewrite historical release sections.
+
+## [Unreleased] — v0.1.1-governance
+- Authorized by repository owner in ChatGPT on 2026-10-31 to edit GitHub directly and record all changes in logs.
+- Created an isolated release branch; no production VTND or Nhân Hộ Khẩu integrations.
+- Added version policy, future baseline, acceptance protocol, and read-only CI checks.
+- Acceptance status: PENDING — repository source/test inventory and GitHub Actions results not yet independently verified.
+- Existing v0.1.0 README preserved; no historical release claimed to be certified.
+
+## [0.1.0] — prototype (historical, not certified)
+- README describes Micro Agent suggestions, in-memory ETA Adaptive and deterministic TinyPredictor placeholder.
+- Do not describe TinyPredictor as trained ML.
+- Do not claim PASS without linked commit SHA, command output, test counts, and CI run URL.
+
+## Audit log
+| Date (UTC+7) | Actor | Authorization | Action | Target | Result |
+|---|---|---|---|---|---|
+| 2026-10-31 | ChatGPT via connected GitHub | User explicitly authorized full GitHub edits and required log | Created release/v0.1.1-governance from main | Core_AI_Tra_Son | SUCCESS |
+| 2026-10-31 | ChatGPT via connected GitHub | Same authorization | Add governance documents and CI workflow without replacing v0.1.0 | release/v0.1.1-governance | See Git commits and PR |
