@@ -130,3 +130,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.6.0] — Performance Probe
 - Bounded offline reasoning latency budget measurements.
+
+## [1.7.0] — SHADOW Adapter
+- Strict synthetic VTND read-only observation contract.

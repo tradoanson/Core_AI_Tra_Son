@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "core-ai-tra-son"
-version = "1.6.0"
+version = "1.7.0"
 description = "Lightweight read-only decision support prototype"
 requires-python = ">=3.11"
 dependencies = []
