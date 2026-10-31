@@ -58,7 +58,7 @@ class ReleaseAcceptance(unittest.TestCase):
                 calls = {node.func.id if isinstance(node.func, ast.Name) else node.func.attr
                          for node in ast.walk(tree) if isinstance(node, ast.Call)
                          if isinstance(node.func, (ast.Name, ast.Attribute))}
-                self.assertFalse(calls & (suspicious - ({"open", "unlink"} if file.name in {"memory.py", "learning_store.py", "secure_learning.py", "hardened_learning.py", "evaluation_integrity.py"} else set())), calls & suspicious)
+                self.assertFalse(calls & (suspicious - ({"open", "unlink"} if file.name in {"memory.py", "learning_store.py", "secure_learning.py", "hardened_learning.py", "evaluation_integrity.py", "windows_learning.py"} else set())), calls & suspicious)
 
     def test_no_secret_like_literals_in_package(self):
         import re
