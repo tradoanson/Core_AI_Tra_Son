@@ -1,4 +1,5 @@
 """Standalone offline read-only SHADOW viewer. Standard-library Tkinter only."""
+import argparse
 import json
 import tkinter as tk
 from tkinter import ttk
@@ -21,7 +22,7 @@ def snapshot(march_available=0):
 
 def main():
     root=tk.Tk()
-    root.title("Core AI Trà Sơn — SHADOW Viewer v2.5.0")
+    root.title("Core AI Trà Sơn — SHADOW Viewer v3.0.0")
     root.geometry("600x350")
     frm=ttk.Frame(root,padding=18)
     frm.pack(fill="both",expand=True)
@@ -37,4 +38,11 @@ def main():
     root.mainloop()
 
 if __name__=="__main__":
+    parser=argparse.ArgumentParser(description="Offline SHADOW viewer")
+    parser.add_argument("--self-test",action="store_true",help="Headless synthetic diagnostic for packaged EXE")
+    args=parser.parse_args()
+    if args.self_test:
+        result=snapshot()
+        print(json.dumps(result,ensure_ascii=True,sort_keys=True))
+        raise SystemExit(0 if result["mode"]=="OFFLINE_SHADOW" and not result["action_executed"] else 1)
     main()
