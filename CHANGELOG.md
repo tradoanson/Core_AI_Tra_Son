@@ -167,3 +167,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [2.8.0] — Security & Reproducibility
 - Bounded source integrity manifest and path traversal guards; no full supply-chain certification claim.
+
+## [2.9.0] — Release Candidate
+- Fail-closed release evidence gate; Windows PyInstaller EXE artifact CI build (subject to acceptance).
