@@ -146,3 +146,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [2.1.0] — Reliability Hardening
 - Read-only bounded SQLite integrity inspection; no repair or live integration.
+
+## [2.2.0] — Adaptive Learning V2
+- Fail-closed drift freeze and human-review advisory; no automatic learning.
