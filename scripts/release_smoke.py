@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "1.4.0"
+assert version("core-ai-tra-son") == "1.5.0"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -149,3 +149,7 @@ assert detect_outcome_drift([True]*20,[False]*20).pause_recommended
 
 from core_ai_tra_son.decision_explanation import explain_ranking
 assert explain_ranking(AdvancedReasoner().rank({"march_available":0},verified=True,options=["WAIT","REVIEW_GATHER"])).selected == "WAIT"
+
+from core_ai_tra_son.recovery_anchor import issue_anchor,verify_anchor
+anchor=issue_anchor(signed,entries,anchor_key=b"z"*32)
+assert verify_anchor(signed,entries,anchor,anchor_key=b"z"*32)
