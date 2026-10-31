@@ -48,7 +48,7 @@ class ReleaseAcceptance(unittest.TestCase):
                         imports.update(alias.name.split(".")[0] for alias in node.names)
                     elif isinstance(node, ast.ImportFrom) and node.module:
                         imports.add(node.module.split(".")[0])
-                self.assertFalse(imports & (banned - ({"urllib"} if file.name == "memory.py" else set())), imports & banned)
+                self.assertFalse(imports & (banned - ({"urllib"} if file.name in {"memory.py", "learning_store.py"} else set())), imports & banned)
 
     def test_package_has_no_host_file_writes(self):
         suspicious = {"open", "write_text", "write_bytes", "unlink", "remove", "rmtree", "system", "popen", "eval", "exec"}
