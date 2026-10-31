@@ -143,3 +143,6 @@ All releases are append-only records. Never rewrite historical release sections.
 ## [2.0.0] — Stable SHADOW Release
 - Final fail-closed CI evidence policy, cross-version regression and offline wheel handover.
 - Stable refers to synthetic offline SHADOW scope only; no production approval.
+
+## [2.1.0] — Reliability Hardening
+- Read-only bounded SQLite integrity inspection; no repair or live integration.

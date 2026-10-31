@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "2.0.0"
+assert version("core-ai-tra-son") == "2.1.0"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -166,3 +166,6 @@ assert callable(verify_wheel)
 from core_ai_tra_son.stable_shadow import assess_stable_shadow,REQUIRED_JOBS
 verdict=assess_stable_shadow({name:True for name in REQUIRED_JOBS},tests_discovered=411)
 assert verdict.status == "PASS" and not verdict.production_approved and not verdict.action_executed
+
+from core_ai_tra_son.integrity_probe import inspect_sqlite_copy
+assert inspect_sqlite_copy('/nonexistent-shadow-integrity-test.sqlite3').status == 'BLOCKED'
