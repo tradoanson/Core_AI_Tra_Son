@@ -93,3 +93,9 @@ All releases are append-only records. Never rewrite historical release sections.
 - Report improvements, regressions, abstentions and deterministic quality gates.
 - Add explicit immutable in-memory rollback on degradation; no persistence or host actions.
 - Add 25 synthetic quality and regression tests, GitHub Actions acceptance.
+
+## [0.7.1] — Evaluation Integrity & Persistent Rollback (2026-10-31)
+- Reject exact training/holdout event-ID overlap and duplicate holdout identifiers.
+- HMAC-sign create-only evaluation summary bound to ledger head and count; no raw signals persisted.
+- Persist non-destructive, authenticated rollback selection override and freeze further learning.
+- Add 25 synthetic integrity/rollback tests; SHADOW only.
