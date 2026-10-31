@@ -5,6 +5,7 @@ No host actions, disk/network IO, model inference or private-record output.
 from dataclasses import dataclass, asdict
 import math
 from .reasoning import ReasoningEngine
+from .decision_learning import DecisionLearner
 
 MAX_OPTIONS = 8
 ALLOWED_OPTIONS = frozenset({"WAIT", "REVIEW_GATHER", "REVIEW_RETURN"})
@@ -48,7 +49,7 @@ class AdvancedReasoner:
         self._base = ReasoningEngine()
 
     def rank(self, signals: dict, *, verified: bool = False, options=None,
-             memory_state: dict | None = None) -> RankingResult:
+             memory_state: dict | None = None, learning_state=None) -> RankingResult:
         def reject(code, explanation):
             return RankingResult("UNRESOLVED", 0.0, None, (), explanation, (code,))
         if type(options) not in (list, tuple) or not 1 <= len(options) <= MAX_OPTIONS:
@@ -56,6 +57,8 @@ class AdvancedReasoner:
         if (any(type(x) is not str or x not in ALLOWED_OPTIONS for x in options)
                 or len(set(options)) != len(options)):
             return reject("INVALID_OPTIONS", "Unknown or duplicate option")
+        if learning_state is not None and not DecisionLearner.valid(learning_state):
+            return reject("INVALID_LEARNING_STATE", "Learning context rejected")
         base = self._base.evaluate(signals, verified=verified, memory_state=memory_state)
         if base.status == "UNRESOLVED":
             return reject("BASE_UNRESOLVED", "Signal validation failed; ranking withheld")
@@ -91,6 +94,15 @@ class AdvancedReasoner:
                     reasons[option] = ("RETURN_DUE",) if eta <= buffer else ("RETURN_NOT_DUE",)
                     explanations[option] = ("Adjusted ETA is within the return buffer; human review is timely"
                                             if eta <= buffer else "ETA exceeds return buffer; return review has lower priority")
+        # Learning may only adjust eligible review options. Never unblock an
+        # ineligible option or modify WAIT, safety gates or verification.
+        if learning_state is not None:
+            for option in options:
+                if option != "WAIT" and scores[option] > 0:
+                    adjustment = DecisionLearner.adjustment(learning_state, option)
+                    scores[option] = round(max(0.0, min(1.0, scores[option] + adjustment)), 6)
+                    reasons[option] = reasons[option] + ("VERIFIED_LEARNING_ADJUSTMENT",)
+                    explanations[option] += " (bounded verified-outcome preference adjustment)"
         ordered = sorted(options, key=lambda x: (-scores[x], x))
         if all(scores[x] == 0 for x in ordered):
             return reject("NO_SAFE_OPTION", "No eligible recommendation in supplied options")
@@ -105,6 +117,6 @@ class AdvancedReasoner:
         return RankingResult("REVIEW" if selected.option != "WAIT" else "WAITING",
                              base.confidence, selected.option, tuple(ranked),
                              ("Selected " + selected.option + " (score " + format(selected.score, ".3f") +
-                              "); alternatives ranked by fixed policy score, then option ID. " +
+                              "); alternatives ranked by safety policy plus bounded verified learning, then option ID. " +
                               selected.explanation),
                              ("RANKED_ADVISORY",))
