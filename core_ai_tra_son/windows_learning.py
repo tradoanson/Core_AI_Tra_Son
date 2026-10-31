@@ -95,6 +95,29 @@ class WindowsLearningStore(SecureLearningStore):
         self._publish(updated, count + 1, digest)
         return True
 
+    def initialize(self):
+        if not self.path.parent.is_dir():
+            raise FileNotFoundError("parent directory missing")
+        if self.path.exists():
+            with self._readonly() as db:
+                self._schema_check(db)
+            return
+        fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        os.close(fd)
+        try:
+            with contextlib.closing(sqlite3.connect(self.path, timeout=30)) as db:
+                with db:
+                    db.execute("CREATE TABLE learning_meta(version INTEGER NOT NULL)")
+                    db.execute("INSERT INTO learning_meta VALUES (1)")
+                    db.execute("""CREATE TABLE learning_events(
+                        seq INTEGER PRIMARY KEY, event_id TEXT UNIQUE NOT NULL,
+                        option TEXT NOT NULL, successful INTEGER NOT NULL,
+                        prev_hash TEXT NOT NULL, event_hash TEXT NOT NULL)""")
+                    self._schema_check(db)
+        except Exception:
+            self.path.unlink(missing_ok=True)
+            raise
+
     def bootstrap(self):
         with self._guard():
             return super().bootstrap()
