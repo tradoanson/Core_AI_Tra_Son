@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "0.6.2"
+assert version("core-ai-tra-son") == "0.6.3"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -54,3 +54,13 @@ with tempfile.TemporaryDirectory() as directory:
     assert secured.observe("smoke1", "REVIEW_GATHER", successful=True, verified=True)
     assert secured.state().gather_samples == 1
     assert not secured.observe("smoke1", "REVIEW_GATHER", successful=True, verified=True)
+
+from core_ai_tra_son.hardened_learning import HardenedLearningStore
+with tempfile.TemporaryDirectory() as directory:
+    root = Path(directory)
+    store = HardenedLearningStore(root / "ledger.sqlite3", root / "anchor.json", b"k" * 32)
+    store.initialize()
+    store.bootstrap()
+    assert store.observe("smoke-1", "REVIEW_GATHER", successful=True, verified=True)
+    assert not store.observe("smoke-1", "REVIEW_GATHER", successful=True, verified=True)
+    assert store.state().gather_samples == 1
