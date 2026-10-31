@@ -1,6 +1,6 @@
 # v0.7.0 — Decision Evaluation & Learning Quality
 
-Status: PENDING GitHub Actions and merge verification.
+Status: CI PASS on branch (Python 3.11, 3.12, 3.13); merge pending.\n\nCI evidence: https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41200591217\nVersioned verification: https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41200591144
 
 Scope: compare unchanged policy baseline and bounded adapted recommendations against 8..512 caller-verified holdout cases; track exact accuracy, improvements, regressions and abstentions. Fail closed on insufficient evidence. Return prior immutable state on a degraded quality report; no host or storage mutation.
 
