@@ -26,3 +26,8 @@ All releases are append-only records. Never rewrite historical release sections.
 
 | 2026-10-31 | ChatGPT via connected GitHub | Owner authorized GitHub-only acceptance | Added isolated clean-install, smoke, static safety and preservation checks; initial 3.12/3.13 venv setuptools issue fixed | release/v0.1.1-final-acceptance | PASS on https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41197588822 |
 | 2026-10-31 | ChatGPT via connected GitHub | Same authorization | Appended acceptance evidence; physical-device and host-app tests explicitly deferred | acceptance/ACCEPTANCE_v0.1.1.md | PASS GitHub-only; tag pending |
+
+## [0.2.0] — Adaptive Memory (in development, 2026-10-31)
+- Add explicit, dedicated SQLite-backed AdaptiveMemory with namespace isolation, persistence and verified-only EMA learning.
+- Add outlier and invalid-input rejection, 12 new tests, offline CI on Python 3.11–3.13, usage guide and acceptance evidence file.
+- No production integration; v0.1.1 source and tests retained. Final CI/tag pending.
