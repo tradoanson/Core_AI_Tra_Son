@@ -133,3 +133,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.7.0] — SHADOW Adapter
 - Strict synthetic VTND read-only observation contract.
+
+## [1.8.0] — Packaging
+- Offline Python wheel build, checksum and CI artifact publishing.
