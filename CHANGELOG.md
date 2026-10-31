@@ -152,3 +152,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [2.3.0] — Decision Intelligence
 - Deterministic margin and blocked-option conflict diagnostics; heuristic uncalibrated confidence.
+
+## [2.4.0] — Lightweight Resource Measurement
+- Offline bounded CPU-time and tracemalloc measurement; no optimization claim.
