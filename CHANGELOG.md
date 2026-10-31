@@ -52,3 +52,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Deterministic multi-signal verified reasoning with bounded confidence, explicit reasons and allowlisted evidence.
 - Optional ETA bias memory context without confidence inflation; no host actions or persistent writes.
 - 14 reasoning tests, 3-version CI and release acceptance.
+
+## [0.4.1] — Reasoning Validation & Calibration diagnostics (2026-10-31)
+- Detect contradictory march availability/capacity signals and fail closed.
+- Add synthetic benchmark agreement by confidence bin, repeatability and parallel stability tests.
+- Confidence is not probabilistically calibrated; no host actions or production integration.
