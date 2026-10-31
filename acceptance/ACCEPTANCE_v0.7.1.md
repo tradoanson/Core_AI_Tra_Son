@@ -1,6 +1,6 @@
 # v0.7.1 — Evaluation Integrity & Persistent Rollback
 
-Status: PENDING GitHub Actions and merge.
+Status: CI PASS on branch (Python 3.11, 3.12, 3.13); merge pending.\n\nCI evidence: https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41200939960\nVersioned verification: https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41200939964
 
 Gates: >=265 tests, Python 3.11/3.12/3.13, exact training/holdout event-ID overlap detection, HMAC-SHA256 signed bounded report bound to authenticated ledger count/head, create-only artifact, rollback override persisted and authenticated, tamper/stale/missing fail closed, freeze further learning under override, no host actions.
 
