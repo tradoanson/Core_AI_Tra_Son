@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "0.7.0"
+assert version("core-ai-tra-son") == "0.7.1"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -74,3 +74,20 @@ bad_cases = [DecisionCase("bad" + str(i), cases[i].signals, "REVIEW_RETURN") for
 bad = evaluate_quality(bad_cases, learned)
 assert bad.status == "DEGRADED"
 assert rollback_on_degradation(learned, DecisionLearningState(), bad) == DecisionLearningState()
+
+from core_ai_tra_son.evaluation_integrity import EvaluationIntegrityStore
+with tempfile.TemporaryDirectory() as directory:
+    root = Path(directory)
+    store = EvaluationIntegrityStore(root/"ledger.sqlite3", root/"anchor.json", b"k"*32,
+                                     root/"evaluation.json", root/"rollback.json")
+    store.initialize()
+    store.bootstrap()
+    for i in range(4):
+        store.observe("train_g"+str(i), "REVIEW_GATHER", successful=True, verified=True)
+        store.observe("train_r"+str(i), "REVIEW_RETURN", successful=False, verified=True)
+    holdout = [DecisionCase("holdout"+str(i), {"march_available":2, "resource_available":True,
+               "eta_seconds":100, "return_buffer_seconds":300}, "REVIEW_RETURN") for i in range(8)]
+    assert store.evaluate_holdout(holdout).status == "DEGRADED"
+    assert store.verify_evaluation()["report"]["status"] == "DEGRADED"
+    store.activate_rollback(DecisionLearningState())
+    assert store.effective_state() == DecisionLearningState()
