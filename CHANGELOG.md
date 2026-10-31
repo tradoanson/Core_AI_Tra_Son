@@ -158,3 +158,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [2.5.0] — Windows SHADOW Viewer
 - Tkinter standalone synthetic demo viewer script; no packaged EXE or production integration.
+
+## [2.6.0] — Adversarial Regression
+- Nine synthetic negative and edge-case inputs; fail-closed regression report.
