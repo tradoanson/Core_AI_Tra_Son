@@ -2,8 +2,8 @@
 from dataclasses import dataclass, asdict
 import math
 
-SIGNALS = frozenset({"march_available", "eta_seconds", "return_buffer_seconds", "resource_available"})
-MAX_SIGNALS = 4
+SIGNALS = frozenset({"march_available", "march_capacity", "eta_seconds", "return_buffer_seconds", "resource_available"})
+MAX_SIGNALS = 5
 MAX_ETA = 604800
 MAX_BUFFER = 3600
 
@@ -34,6 +34,12 @@ class ReasoningEngine:
         march = signals.get("march_available")
         if type(march) is not int or not 0 <= march <= 100:
             return unresolved("INVALID_MARCH", "March count is missing or invalid")
+        capacity = signals.get("march_capacity")
+        if capacity is not None:
+            if type(capacity) is not int or not 0 <= capacity <= 100:
+                return unresolved("INVALID_CAPACITY", "March capacity is invalid")
+            if march > capacity:
+                return unresolved("SIGNAL_CONFLICT", "Available march exceeds declared capacity")
         eta = signals.get("eta_seconds")
         buffer = signals.get("return_buffer_seconds")
         resource = signals.get("resource_available")
@@ -44,6 +50,8 @@ class ReasoningEngine:
         if resource is not None and type(resource) is not bool:
             return unresolved("INVALID_RESOURCE", "Resource availability must be boolean")
         evidence = {"march_available": march}
+        if capacity is not None:
+            evidence["march_capacity"] = capacity
         codes = []
         score = 0.6
         if march == 0:
