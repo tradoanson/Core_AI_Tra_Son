@@ -92,9 +92,10 @@ class TrustedEvaluationStore(EvaluationIntegrityStore):
         self._schema_check(db)
         state = DecisionLearningState()
         previous = "0" * 64
+        expected = 1
         for seq, event_id, option, successful, prev, digest in db.execute(
                 "SELECT seq,event_id,option,successful,prev_hash,event_hash FROM learning_events ORDER BY seq"):
-            if (seq > 1000000 or seq < 1 or prev != previous
+            if (seq != expected or seq > 1000000 or prev != previous
                     or digest != self._digest(event_id, option, successful, prev)
                     or option not in ("REVIEW_GATHER", "REVIEW_RETURN")
                     or successful not in (0, 1)):
@@ -102,6 +103,9 @@ class TrustedEvaluationStore(EvaluationIntegrityStore):
             if seq <= count:
                 state = self.learner.observe(state, option, successful=bool(successful), verified=True)
             previous = digest
+            expected += 1
+        if count >= expected:
+            raise ValueError("historical target beyond ledger")
         return state
 
     def rollback_request(self, target_count):
