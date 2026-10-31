@@ -33,6 +33,7 @@ jobs:
       - name: Build isolated environment and install local source
         run: |
           python -m venv .acceptance-venv
+          .acceptance-venv/bin/python -m pip install --disable-pip-version-check 'setuptools>=68'
           .acceptance-venv/bin/python -m pip install --no-deps --no-build-isolation -e .
       - name: Execute installed package outside repository
         run: |
