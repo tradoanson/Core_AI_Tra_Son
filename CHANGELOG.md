@@ -164,3 +164,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [2.7.0] — Decision Quality Audit
 - Five labeled synthetic fixtures with deterministic agreement report; no real-world accuracy claim.
+
+## [2.8.0] — Security & Reproducibility
+- Bounded source integrity manifest and path traversal guards; no full supply-chain certification claim.
