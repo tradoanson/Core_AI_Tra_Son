@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "1.2.0"
+assert version("core-ai-tra-son") == "1.3.0"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -143,3 +143,6 @@ from core_ai_tra_son.holdout_leakage import audit_holdout_leakage
 split_a=[DecisionCase("train"+str(i),{"march_available":i},"WAIT") for i in range(8)]
 split_b=[DecisionCase("hold"+str(i),{"march_available":i+100},"WAIT") for i in range(8)]
 assert audit_holdout_leakage(split_a,split_b).status == "PASS"
+
+from core_ai_tra_son.learning_drift import detect_outcome_drift
+assert detect_outcome_drift([True]*20,[False]*20).pause_recommended
