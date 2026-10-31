@@ -23,3 +23,6 @@ All releases are append-only records. Never rewrite historical release sections.
 | 2026-10-31 | ChatGPT via connected GitHub | Owner authorization | Inventoried main: original Python modules and test_core.py are at repository root; ZIP also present | main | VERIFIED via GitHub Git tree |
 | 2026-10-31 | ChatGPT via connected GitHub | Owner authorization | Copied original modules into core_ai_tra_son/ and test_core.py into tests/ without deleting root originals | release/v0.1.1-governance | SUCCESS |
 | 2026-10-31 | ChatGPT via connected GitHub | Owner authorization | Added twelve safety/regression checks | tests/test_safety_v0_1_1.py | SUCCESS; CI pending |
+
+| 2026-10-31 | ChatGPT via connected GitHub | Owner authorized GitHub-only acceptance | Added isolated clean-install, smoke, static safety and preservation checks; initial 3.12/3.13 venv setuptools issue fixed | release/v0.1.1-final-acceptance | PASS on https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41197588822 |
+| 2026-10-31 | ChatGPT via connected GitHub | Same authorization | Appended acceptance evidence; physical-device and host-app tests explicitly deferred | acceptance/ACCEPTANCE_v0.1.1.md | PASS GitHub-only; tag pending |

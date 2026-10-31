@@ -25,3 +25,13 @@ Status: **CI PASS observed for implementation commit; final documentation commit
 - TinyPredictor is a deterministic placeholder, not trained ML.
 - Existing runtime logic remains the prototype.
 - Release tag and merge only after final CI check on final commit.
+
+## Final GitHub-only acceptance addendum — 2026-10-31
+- GitHub Actions acceptance run: https://github.com/tradoanson/Core_AI_Tra_Son/actions/runs/41197588822
+- Source commit tested: `7e826b419f327abca68bd40565ea332c40986d07`
+- Result: **SUCCESS**, Python 3.11, 3.12, 3.13.
+- Added isolated venv installation, offline installed-package smoke test, safety static checks, tracked filename checks, original v0.1.0 file preservation and expanded unit tests.
+- First attempt failed on Python 3.12/3.13 due to missing setuptools in fresh venv; workflow explicitly installs setuptools before local package install; subsequent run PASS.
+- Security caveat: static denylist and filename scan are not comprehensive penetration testing or secret scanning.
+- GitHub-only acceptance does not include physical-machine testing or integration with VTND/Nhân Hộ Khẩu.
+- Release tag/rollback verification remains pending until tag is created and tag-specific CI executes.
