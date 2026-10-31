@@ -47,3 +47,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Bound observation/record/required-field inputs and memory sample counts; fail closed on excessive input.
 - Add deterministic and parallel evaluation tests, sanitized in-memory ring audit and strict audit allowlists.
 - 14 reliability tests, versioned GitHub Actions acceptance; no persistent logging or production integration.
+
+## [0.4.0] — Reasoning Engine (2026-10-31)
+- Deterministic multi-signal verified reasoning with bounded confidence, explicit reasons and allowlisted evidence.
+- Optional ETA bias memory context without confidence inflation; no host actions or persistent writes.
+- 14 reasoning tests, 3-version CI and release acceptance.
