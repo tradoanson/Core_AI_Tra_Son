@@ -77,3 +77,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Explicit isolated SQLite verified-outcome ledger with transactional deduplication and hash-linked replay validation.
 - Consistent backup and fail-closed restore to absent target; reject corrupt, conflicting or unrecognized data.
 - 20 persistence/integrity tests and Python 3.11–3.13 GitHub-only acceptance; SHADOW only.
+
+## [0.6.2] — Learning Security & Performance (2026-10-31)
+- Add optional HMAC-SHA256 external checkpoint and anchored rollback detection with caller-managed key.
+- Add incremental suffix replay and explicit crash reconciliation without relaxing SHADOW safety gates.
+- Add 25 synthetic security, concurrency, recovery and compatibility tests on GitHub Actions.
