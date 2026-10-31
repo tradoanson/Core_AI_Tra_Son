@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "0.6.3"
+assert version("core-ai-tra-son") == "0.7.0"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -64,3 +64,13 @@ with tempfile.TemporaryDirectory() as directory:
     assert store.observe("smoke-1", "REVIEW_GATHER", successful=True, verified=True)
     assert not store.observe("smoke-1", "REVIEW_GATHER", successful=True, verified=True)
     assert store.state().gather_samples == 1
+
+from core_ai_tra_son.decision_quality import DecisionCase, evaluate_quality, rollback_on_degradation
+cases = [DecisionCase("smoke" + str(i), {"march_available": 2, "resource_available": True, "eta_seconds": 100, "return_buffer_seconds": 300}, "REVIEW_GATHER") for i in range(8)]
+learned = DecisionLearningState(gather_adjustment=0.08, return_adjustment=-0.08, gather_samples=4, return_samples=4)
+report = evaluate_quality(cases, learned)
+assert report.status == "PASS" and report.delta > 0 and not report.action_executed
+bad_cases = [DecisionCase("bad" + str(i), cases[i].signals, "REVIEW_RETURN") for i in range(8)]
+bad = evaluate_quality(bad_cases, learned)
+assert bad.status == "DEGRADED"
+assert rollback_on_degradation(learned, DecisionLearningState(), bad) == DecisionLearningState()

@@ -87,3 +87,9 @@ All releases are append-only records. Never rewrite historical release sections.
 - Add opt-in POSIX multi-process lock and durable checkpoint directory fsync.
 - Validate and reconcile post-crash suffix before new writes; protect against stale checkpoint publication.
 - Add 19 synthetic multi-process, failure, integrity and bounded growth tests; SHADOW only.
+
+## [0.7.0] — Decision Evaluation & Learning Quality (2026-10-31)
+- Add bounded, verified holdout comparison of baseline and learned SHADOW advisory rankings.
+- Report improvements, regressions, abstentions and deterministic quality gates.
+- Add explicit immutable in-memory rollback on degradation; no persistence or host actions.
+- Add 25 synthetic quality and regression tests, GitHub Actions acceptance.
