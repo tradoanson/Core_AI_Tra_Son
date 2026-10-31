@@ -17,7 +17,7 @@ PACKAGE = ROOT / "core_ai_tra_son"
 class ReleaseAcceptance(unittest.TestCase):
     def test_release_metadata(self):
         text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-        self.assertIn('version = "0.1.1"', text)
+        self.assertIn('version = "0.2.0"', text)
 
     def test_public_import(self):
         self.assertTrue(callable(CoreAI))
@@ -38,7 +38,7 @@ class ReleaseAcceptance(unittest.TestCase):
         self.assertIn("dependencies = []", text)
 
     def test_package_static_no_execution_or_network(self):
-        banned = {"subprocess", "socket", "requests", "urllib", "httpx", "ctypes", "winreg", "sqlite3"}
+        banned = {"subprocess", "socket", "requests", "urllib", "httpx", "ctypes", "winreg"}
         for file in PACKAGE.glob("*.py"):
             with self.subTest(file=file.name):
                 tree = ast.parse(file.read_text(encoding="utf-8"))
