@@ -136,3 +136,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.8.0] — Packaging
 - Offline Python wheel build, checksum and CI artifact publishing.
+
+## [1.9.0] — SHADOW Release Candidate
+- Cross-component offline regression and packaged wheel acceptance.
