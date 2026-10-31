@@ -139,3 +139,7 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.9.0] — SHADOW Release Candidate
 - Cross-component offline regression and packaged wheel acceptance.
+
+## [2.0.0] — Stable SHADOW Release
+- Final fail-closed CI evidence policy, cross-version regression and offline wheel handover.
+- Stable refers to synthetic offline SHADOW scope only; no production approval.
