@@ -16,6 +16,7 @@ from pathlib import Path
 from .decision_learning import DecisionLearner, DecisionLearningState
 from .decision_quality import DecisionCase, QualityReport, evaluate_quality
 from .hardened_learning import HardenedLearningStore
+from .secure_learning import SecureLearningStore
 
 _CASE_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 
@@ -173,4 +174,13 @@ class EvaluationIntegrityStore(HardenedLearningStore):
         with self._guard():
             if self.override_path.exists():
                 raise ValueError("learning frozen while rollback override active")
-            return super().observe(event_id, option, successful=successful, verified=verified)
+            if verified is not True:
+                return False
+            with self._readonly() as db:
+                state, count, head = self._ledger_identity(db)
+                anchor, _ = self._load()
+            if count != anchor['count']:
+                self._publish(state, count, head)
+            # Bypass HardenedLearningStore.observe to avoid acquiring flock twice.
+            return SecureLearningStore.observe(self, event_id, option,
+                                               successful=successful, verified=True)
