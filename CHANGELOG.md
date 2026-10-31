@@ -149,3 +149,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [2.2.0] — Adaptive Learning V2
 - Fail-closed drift freeze and human-review advisory; no automatic learning.
+
+## [2.3.0] — Decision Intelligence
+- Deterministic margin and blocked-option conflict diagnostics; heuristic uncalibrated confidence.
