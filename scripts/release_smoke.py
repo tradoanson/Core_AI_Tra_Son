@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "3.0.0"
+assert version("core-ai-tra-son") == "3.1.0"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -194,3 +194,6 @@ assert evaluate_candidate({}).status == 'BLOCKED'
 
 from core_ai_tra_son.candidate_gate import REQUIRED,evaluate_candidate
 assert evaluate_candidate(dict.fromkeys(REQUIRED,True)).status == 'READY_FOR_REVIEW'
+
+from core_ai_tra_son.shadow_snapshot import shadow_snapshot
+assert shadow_snapshot()['mode']=='OFFLINE_SHADOW'
