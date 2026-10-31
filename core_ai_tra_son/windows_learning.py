@@ -4,6 +4,7 @@ Uses Windows CRT byte-range locks, not POSIX flock. This is deliberately
 Windows-only, local filesystem only, and never dispatches host actions.
 """
 import contextlib
+import sqlite3
 import os
 import stat
 import sys
@@ -12,6 +13,7 @@ import time
 from pathlib import Path
 
 from .secure_learning import SecureLearningStore
+from .learning_store import _ID, _MAX_EVENTS
 
 try:
     import msvcrt
@@ -59,6 +61,39 @@ class WindowsLearningStore(SecureLearningStore):
                     os.lseek(fd, 0, os.SEEK_SET)
                     msvcrt.locking(fd, msvcrt.LK_UNLCK, 1)
                 os.close(fd)
+
+    @contextlib.contextmanager
+    def _readonly(self):
+        # sqlite3.Connection.__exit__ does not close the file on Windows.
+        with contextlib.closing(super()._readonly()) as db:
+            yield db
+
+    def _observe_locked(self, event_id, option, *, successful, verified=False):
+        if verified is not True:
+            return False
+        if type(event_id) is not str or not _ID.fullmatch(event_id):
+            raise ValueError("invalid opaque event ID")
+        if type(successful) is not bool or option not in ("REVIEW_GATHER", "REVIEW_RETURN"):
+            raise ValueError("invalid verified outcome")
+        with contextlib.closing(sqlite3.connect(self.path, timeout=30)) as db:
+            with db:
+                db.execute("BEGIN IMMEDIATE")
+                state, count, head = self._incremental(db)
+                prior = db.execute("SELECT option,successful FROM learning_events WHERE event_id=?", (event_id,)).fetchone()
+                if prior is not None:
+                    if prior != (option, int(successful)):
+                        raise ValueError("conflicting duplicate")
+                    return False
+                if count >= _MAX_EVENTS:
+                    raise ValueError("event limit")
+                updated = self.learner.observe(state, option, successful=successful, verified=True)
+                if updated == state:
+                    return False
+                digest = self._digest(event_id, option, successful, head)
+                db.execute("INSERT INTO learning_events VALUES(?,?,?,?,?,?)",
+                           (count + 1, event_id, option, int(successful), head, digest))
+        self._publish(updated, count + 1, digest)
+        return True
 
     def bootstrap(self):
         with self._guard():
