@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "1.0.0"
+assert version("core-ai-tra-son") == "1.1.0"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -129,3 +129,12 @@ from core_ai_tra_son.release_readiness import evaluate_readiness
 from core_ai_tra_son.quality_gate import QualityGate
 from core_ai_tra_son.recovery_audit import RecoveryAudit
 assert evaluate_readiness(quality=QualityGate("PASS",10,0,10,0.001),audit=RecoveryAudit(b"k"*32),entries=(),recovered_state=DecisionLearningState(),provenance_verified=True,integrity_verified=True,human_reviewed=True).status == "PASS"
+
+from core_ai_tra_son.windows_learning import WindowsLearningStore
+if __import__("sys").platform == "win32":
+    with tempfile.TemporaryDirectory() as directory:
+        root=Path(directory)
+        native=WindowsLearningStore(root/"ledger.sqlite3",root/"anchor.json",b"k"*32)
+        native.initialize(); native.bootstrap()
+        assert native.observe("native-smoke","REVIEW_GATHER",successful=True,verified=True)
+        assert native.state().gather_samples == 1

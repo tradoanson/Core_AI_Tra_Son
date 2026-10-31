@@ -112,3 +112,6 @@ All releases are append-only records. Never rewrite historical release sections.
 ## [1.0.0] — SHADOW Readiness & Handover
 - Fail-closed release readiness gate; no host actions or production approval.
 - 16 readiness tests, isolated CI acceptance and handover documentation.
+
+## [1.1.0] — Windows Reliability
+- Opt-in Windows native byte-range lock and crash-reconciliation learning store; Windows CI.
