@@ -42,3 +42,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Add pure SHADOW Observer -> Memory context -> CoreAI Reasoner -> Safety Gate -> structured decision result.
 - No host actions, network, persistent logs or citizen-record output. Twelve micro-agent tests, clean-install and Python 3.11–3.13 CI.
 - Production integration and Micro Agent execution explicitly excluded.
+
+## [0.3.1] — Micro Agent Reliability (2026-10-31)
+- Bound observation/record/required-field inputs and memory sample counts; fail closed on excessive input.
+- Add deterministic and parallel evaluation tests, sanitized in-memory ring audit and strict audit allowlists.
+- 14 reliability tests, versioned GitHub Actions acceptance; no persistent logging or production integration.

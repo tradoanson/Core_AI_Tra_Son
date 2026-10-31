@@ -4,6 +4,12 @@ from typing import Any
 import math
 from .engine import CoreAI
 
+MAX_REQUIRED_FIELDS = 128
+MAX_OBSERVATION_KEYS = 64
+MAX_RECORD_KEYS = 256
+MAX_FIELD_NAME = 128
+MAX_MEMORY_SAMPLES = 1_000_000_000
+
 ALLOWED_PROFILES = frozenset({"vtnd", "nhankhau"})
 ALLOWED_STATUSES = frozenset({"UNRESOLVED", "WAITING", "REVIEW", "PASS"})
 
@@ -39,6 +45,8 @@ class MicroAgent:
     def evaluate(self, observation: dict[str, Any], *, memory_state: dict[str, Any] | None = None) -> AgentResult:
         if not isinstance(observation, dict):
             raise TypeError("observation must be a dict")
+        if len(observation) > MAX_OBSERVATION_KEYS:
+            return AgentResult(self.profile, "UNRESOLVED", "Observation limit exceeded", 0.0, ("RESOURCE_LIMIT",), {}, False)
         # Only narrow, allowlisted primitives leave the observer. Never echo raw
         # records or citizen data into the decision or audit output.
         if self.profile == "vtnd":
@@ -50,7 +58,10 @@ class MicroAgent:
         else:
             required = observation.get("required_fields")
             record = observation.get("record")
-            if not isinstance(required, list) or not all(type(x) is str and 0 < len(x) <= 128 for x in required) or not isinstance(record, dict) or not required:
+            if (not isinstance(required, list) or not 0 < len(required) <= MAX_REQUIRED_FIELDS
+                    or not all(type(x) is str and 0 < len(x) <= MAX_FIELD_NAME for x in required)
+                    or len(set(required)) != len(required) or not isinstance(record, dict)
+                    or len(record) > MAX_RECORD_KEYS):
                 return AgentResult(self.profile, "UNRESOLVED", "Invalid or incomplete input schema", 0.0, ("INVALID_SCHEMA",), {}, False)
             # Evaluate only presence, never persist or emit field values.
             missing = sum(record.get(field) is None or (isinstance(record.get(field), str) and not record[field].strip()) for field in required)
@@ -70,7 +81,7 @@ class MicroAgent:
             bias = memory_state.get("bias_seconds")
             samples = memory_state.get("samples")
             if (memory_state.get("namespace") == "vtnd" and type(samples) is int and samples > 0
-                    and type(bias) in (float, int) and math.isfinite(bias) and abs(bias) <= 3600):
+                    and samples <= MAX_MEMORY_SAMPLES and type(bias) in (float, int) and math.isfinite(bias) and abs(bias) <= 3600):
                 memory_used = True
                 details["eta_bias_seconds"] = float(bias)
                 details["memory_samples"] = samples

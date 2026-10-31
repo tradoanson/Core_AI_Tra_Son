@@ -17,7 +17,7 @@ PACKAGE = ROOT / "core_ai_tra_son"
 class ReleaseAcceptance(unittest.TestCase):
     def test_release_metadata(self):
         text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-        self.assertIn('version = "0.3.0"', text)
+        self.assertIn('version = "0.3.1"', text)
 
     def test_public_import(self):
         self.assertTrue(callable(CoreAI))
