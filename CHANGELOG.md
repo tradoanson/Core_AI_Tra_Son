@@ -124,3 +124,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.4.0] — Explainability
 - Structured decision reasons and explicitly uncalibrated confidence.
+
+## [1.5.0] — Recovery Anchor
+- Independent signed audit-head anchor with explicit truncation verification.
