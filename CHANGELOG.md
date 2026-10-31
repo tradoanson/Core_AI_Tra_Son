@@ -19,3 +19,7 @@ All releases are append-only records. Never rewrite historical release sections.
 |---|---|---|---|---|---|
 | 2026-10-31 | ChatGPT via connected GitHub | User explicitly authorized full GitHub edits and required log | Created release/v0.1.1-governance from main | Core_AI_Tra_Son | SUCCESS |
 | 2026-10-31 | ChatGPT via connected GitHub | Same authorization | Add governance documents and CI workflow without replacing v0.1.0 | release/v0.1.1-governance | See Git commits and PR |
+
+| 2026-10-31 | ChatGPT via connected GitHub | Owner authorization | Inventoried main: original Python modules and test_core.py are at repository root; ZIP also present | main | VERIFIED via GitHub Git tree |
+| 2026-10-31 | ChatGPT via connected GitHub | Owner authorization | Copied original modules into core_ai_tra_son/ and test_core.py into tests/ without deleting root originals | release/v0.1.1-governance | SUCCESS |
+| 2026-10-31 | ChatGPT via connected GitHub | Owner authorization | Added twelve safety/regression checks | tests/test_safety_v0_1_1.py | SUCCESS; CI pending |
