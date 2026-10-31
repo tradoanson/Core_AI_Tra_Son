@@ -31,3 +31,9 @@ All releases are append-only records. Never rewrite historical release sections.
 - Add explicit, dedicated SQLite-backed AdaptiveMemory with namespace isolation, persistence and verified-only EMA learning.
 - Add outlier and invalid-input rejection, 12 new tests, offline CI on Python 3.11–3.13, usage guide and acceptance evidence file.
 - No production integration; v0.1.1 source and tests retained. Final CI/tag pending.
+
+## [0.2.1] — Memory resilience (2026-10-31)
+- SQLite concurrent-writer transaction tests, 30-second busy timeout and read-only state access.
+- Consistent integrity-checked SQLite online backup; refuses overwrite; recovery validates backup and restores only to absent target.
+- Corrupt source/backup fails closed; no automatic destructive recovery. Ten resilience tests, 3-version CI, recovery guide and acceptance record.
+- Production machine tests and Micro Agent Engine deliberately out of scope.
