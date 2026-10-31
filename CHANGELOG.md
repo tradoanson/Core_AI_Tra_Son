@@ -118,3 +118,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [1.2.0] — Holdout Leakage
 - Conservative structural cross-split leakage audit for offline evaluation.
+
+## [1.3.0] — Drift Advisory
+- Verified-outcome drift monitor with conservative pause recommendation.
