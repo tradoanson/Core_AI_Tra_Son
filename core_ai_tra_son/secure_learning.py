@@ -9,6 +9,7 @@ import json
 import os
 import sqlite3
 import tempfile
+import threading
 from dataclasses import asdict
 from pathlib import Path
 
@@ -25,6 +26,7 @@ class SecureLearningStore(LearningStore):
         if type(key) is not bytes or len(key) < 32:
             raise ValueError("independent secret key of at least 32 bytes required")
         self._key = key
+        self._lock = threading.RLock()
 
     def _seal(self, payload):
         return hmac.new(self._key, json.dumps(payload, sort_keys=True, separators=(",", ":")).encode(), hashlib.sha256).hexdigest()
@@ -118,6 +120,10 @@ class SecureLearningStore(LearningStore):
         return state
 
     def observe(self, event_id, option, *, successful, verified=False):
+        with self._lock:
+            return self._observe_locked(event_id, option, successful=successful, verified=verified)
+
+    def _observe_locked(self, event_id, option, *, successful, verified=False):
         if verified is not True:
             return False
         if type(event_id) is not str or not _ID.fullmatch(event_id):
