@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "2.5.0"
+assert version("core-ai-tra-son") == "2.6.0"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -178,3 +178,6 @@ assert not diagnose_decision({'march_available':0},verified=True).action_execute
 
 from core_ai_tra_son.resource_probe import measure_shadow_resources
 assert not measure_shadow_resources({'march_available':0},iterations=1).action_executed
+
+from core_ai_tra_son.adversarial_matrix import run_adversarial_matrix
+assert run_adversarial_matrix().status == 'PASS'
