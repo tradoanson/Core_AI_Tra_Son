@@ -79,8 +79,11 @@ class TrustedEvaluationStore(EvaluationIntegrityStore):
                 or type(provenance["signature"]) is not str
                 or not hmac.compare_digest(provenance["signature"], _sign(self._issuer_key, payload))):
             raise ValueError("untrusted or altered provenance")
-        return super().evaluate_holdout(cases, max_regressions=max_regressions,
+        return EvaluationIntegrityStore.evaluate_holdout(self, cases, max_regressions=max_regressions,
                                         min_delta=min_delta)
+
+    def evaluate_holdout(self, cases, *, max_regressions=0, min_delta=0.0):
+        raise ValueError('trusted provenance required')
 
     def _historical_state(self, db, count):
         """Replay and validate the entire hash chain, returning exact prefix state."""
