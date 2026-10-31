@@ -5,7 +5,7 @@ from core_ai_tra_son import CoreAI
 from core_ai_tra_son.adaptive import EtaAdaptive
 from core_ai_tra_son.tiny_ai import TinyPredictor
 
-assert version("core-ai-tra-son") == "0.5.0"
+assert version("core-ai-tra-son") == "0.5.1"
 assert CoreAI("vtnd").evaluate({"march_available": 0, "verified": True}).status == "WAITING"
 assert CoreAI("vtnd").evaluate({"march_available": 1, "verified": False}).status == "UNRESOLVED"
 assert CoreAI("nhankhau").evaluate({"record": {"name": "Sample"}, "required_fields": ["name", "birth_date"]}).details["missing_fields"] == ["birth_date"]
@@ -22,3 +22,6 @@ assert validate_benchmark([BenchmarkCase("conflict", {"march_available": 2, "mar
 from core_ai_tra_son.advanced_reasoning import AdvancedReasoner
 ranking = AdvancedReasoner().rank({"march_available": 0}, verified=True, options=["WAIT", "REVIEW_GATHER"])
 assert ranking.selected == "WAIT" and ranking.action_executed is False
+
+quality = AdvancedReasoner().rank({"march_available": 2}, verified=True, options=["WAIT", "REVIEW_GATHER"])
+assert quality.selected == "WAIT" and quality.action_executed is False

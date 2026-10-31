@@ -62,3 +62,8 @@ All releases are append-only records. Never rewrite historical release sections.
 - Add deterministic comparison and ranking of allowlisted human-review alternatives with reason codes and fixed policy scores.
 - Fail closed on contradictory/unverified signals, unknown options and missing return context.
 - 15 new ranking tests; GitHub-only 3-version acceptance; SHADOW only.
+
+## [0.5.1] — Decision Quality & Safety Validation (2026-10-31)
+- Block gather review without explicitly verified resource availability and return review when resources are explicitly unavailable.
+- Improve ranked-option explanations; test boundary, adversarial, missing-signal and concurrent decision cases.
+- GitHub-only Python 3.11–3.13 acceptance; SHADOW only.
