@@ -1,0 +1,46 @@
+name: Core AI - versioned verification
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: unittest / Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Verify source and tests exist
+        run: |
+          test -d core_ai_tra_son
+          test -d tests
+          find tests -name 'test_*.py' | grep -q .
+      - name: Run unit tests (no silent zero tests)
+        run: |
+          python - <<'PY'
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests', pattern='test_*.py')
+          count = suite.countTestCases()
+          print(f'Discovered {count} tests')
+          if count == 0:
+              raise SystemExit('FAIL: zero tests discovered')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful():
+              raise SystemExit(1)
+          PY

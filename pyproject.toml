@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "core-ai-tra-son"
+version = "0.1.1"
+description = "Lightweight read-only decision support prototype"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.setuptools]
+packages = ["core_ai_tra_son"]
