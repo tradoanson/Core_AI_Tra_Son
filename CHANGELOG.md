@@ -161,3 +161,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [2.6.0] — Adversarial Regression
 - Nine synthetic negative and edge-case inputs; fail-closed regression report.
+
+## [2.7.0] — Decision Quality Audit
+- Five labeled synthetic fixtures with deterministic agreement report; no real-world accuracy claim.
