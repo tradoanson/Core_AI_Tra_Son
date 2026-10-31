@@ -156,6 +156,7 @@ class HardenedLearningTests(unittest.TestCase):
 
     def test_lock_symlink_rejected(self):
         lock = Path(str(self.checkpoint) + ".lock")
+        lock.unlink()
         lock.symlink_to(self.db)
         with self.assertRaises(OSError):
             self.store.state()
