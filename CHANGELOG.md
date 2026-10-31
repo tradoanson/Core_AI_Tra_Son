@@ -108,3 +108,7 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [0.9.0] — Quality Gates
 - Conservative exact paired sign-test gate on synthetic holdout improvements and regressions.
+
+## [1.0.0] — SHADOW Readiness & Handover
+- Fail-closed release readiness gate; no host actions or production approval.
+- 16 readiness tests, isolated CI acceptance and handover documentation.
