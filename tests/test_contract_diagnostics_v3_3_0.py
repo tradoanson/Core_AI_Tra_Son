@@ -28,6 +28,13 @@ class ContractDiagnosticsTests(unittest.TestCase):
     def test_empty_observation_fails_closed(self):
         self.assertEqual(diagnose_contract(IntegrationRequest("nhankhau", {}, True)).reason, "empty_observation")
 
+    def test_non_boolean_verification_rejected(self):
+        for value in (1, "true", None):
+            self.assertEqual(diagnose_contract(IntegrationRequest("vtnd", {"x": 1}, value)).reason, "invalid_verified_type")
+
+    def test_malformed_metadata_rejected(self):
+        self.assertEqual(diagnose_contract(IntegrationRequest(1, {"x": 1}, True)).reason, "invalid_metadata_type")
+
     def test_does_not_mutate_observation(self):
         observation = {"nested": [1, 2]}
         before = repr(observation)
