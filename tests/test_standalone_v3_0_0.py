@@ -12,7 +12,7 @@ class StandaloneV3Tests(unittest.TestCase):
         self.assertIn('"OFFLINE_SHADOW"',p.stdout)
         self.assertIn('"action_executed": false',p.stdout)
     def test_version_label(self):
-        self.assertIn("v3.0.0",Path("scripts/windows_shadow_viewer.py").read_text(encoding="utf-8"))
+        self.assertIn("v3.1.0",Path("scripts/windows_shadow_viewer.py").read_text(encoding="utf-8"))
     def test_cli_guard(self):
         tree=ast.parse(Path("scripts/windows_shadow_viewer.py").read_text(encoding="utf-8"))
         self.assertTrue(any(isinstance(n,ast.If) for n in tree.body))
