@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - 'release/v3.2.0-modular-core'
+      - 'release/v3.2.0-acceptance'
   pull_request:
     branches: [main]
   workflow_dispatch:
