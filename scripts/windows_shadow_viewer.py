@@ -3,26 +3,15 @@ import argparse
 import json
 import tkinter as tk
 from tkinter import ttk
-from core_ai_tra_son.decision_diagnostic import diagnose_decision
+from core_ai_tra_son.shadow_snapshot import shadow_snapshot
 
 def snapshot(march_available=0):
-    if type(march_available) is not int or not 0 <= march_available <= 5:
-        raise ValueError("synthetic march count 0..5 required")
-    diagnostic=diagnose_decision({"march_available":march_available},verified=True)
-    return {
-        "mode":"OFFLINE_SHADOW",
-        "input_kind":"SYNTHETIC_ONLY",
-        "selected":diagnostic.selected,
-        "status":diagnostic.status,
-        "score_margin":diagnostic.margin,
-        "confidence_kind":diagnostic.confidence_kind,
-        "action_executed":False,
-        "production_integrated":False,
-    }
+    """Backward-compatible viewer entry point; engine stays GUI-independent."""
+    return shadow_snapshot(march_available)
 
 def main():
     root=tk.Tk()
-    root.title("Core AI Trà Sơn — SHADOW Viewer v3.0.0")
+    root.title("Core AI Trà Sơn — SHADOW Viewer v3.1.0")
     root.geometry("600x350")
     frm=ttk.Frame(root,padding=18)
     frm.pack(fill="both",expand=True)

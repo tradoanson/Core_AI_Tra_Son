@@ -173,3 +173,6 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [3.0.0] — Standalone SHADOW Release
 - Packaged Windows EXE headless self-test in CI, GUI viewer version update, offline synthetic safety boundaries.
+
+## [3.1.0] — Modular Core
+- Extract synthetic snapshot into GUI-free core, preserve viewer snapshot wrapper and add regression tests.
