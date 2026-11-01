@@ -1,5 +1,6 @@
 """Release acceptance checks: offline, read-only, reproducible."""
 import ast
+import tomllib
 import math
 import pathlib
 import subprocess
@@ -17,7 +18,7 @@ PACKAGE = ROOT / "core_ai_tra_son"
 class ReleaseAcceptance(unittest.TestCase):
     def test_release_metadata(self):
         text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-        self.assertIn('version = "3.1.0"', text)
+        self.assertEqual(tomllib.loads(text)["project"]["version"], "3.2.0")
 
     def test_public_import(self):
         self.assertTrue(callable(CoreAI))
