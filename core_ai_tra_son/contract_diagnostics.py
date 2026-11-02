@@ -14,6 +14,7 @@ MAX_OBSERVATION_FIELDS = 64
 MAX_FIELD_NAME_LENGTH = 128
 MAX_TEXT_VALUE_LENGTH = 4096
 MAX_COLLECTION_ITEMS = 256
+MAX_METADATA_LENGTH = 128
 
 
 @dataclass(frozen=True)
@@ -32,6 +33,8 @@ def diagnose_contract(request: Any) -> ContractDiagnostic:
         return ContractDiagnostic(False, "invalid_verified_type", "shadow")
     if type(request.project) is not str or type(request.contract_version) is not str:
         return ContractDiagnostic(False, "invalid_metadata_type", "shadow")
+    if len(request.project) > MAX_METADATA_LENGTH or len(request.contract_version) > MAX_METADATA_LENGTH:
+        return ContractDiagnostic(False, "metadata_too_large", "shadow")
     if type(request.observation) is not dict:
         return ContractDiagnostic(False, "invalid_observation_type", "shadow")
     if len(request.observation) > MAX_OBSERVATION_FIELDS:
