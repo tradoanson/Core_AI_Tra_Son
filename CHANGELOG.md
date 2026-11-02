@@ -176,3 +176,13 @@ All releases are append-only records. Never rewrite historical release sections.
 
 ## [3.1.0] — Modular Core
 - Extract synthetic snapshot into GUI-free core, preserve viewer snapshot wrapper and add regression tests.
+
+## [3.2.0] — Read-only Integration Contract (2026-11-01)
+- Versioned synthetic VTND/Nhankhau SHADOW request validation; no live host integration.
+- Caller-provided verification flag is not independently authenticated.
+
+## [3.3.0] — Contract Diagnostics Hardening (2026-11-02)
+- Add pure, fail-closed read-only contract diagnostics and nine synthetic tests.
+- Explicitly reject malformed verification types and metadata; do not claim independent observation attestation.
+- Preserve v3.2.0 integration protocol and keep the Python package version at 3.3.0.
+- Dedicated Python/Windows/wheel/EXE acceptance and immutable release evidence are tracked in acceptance/ACCEPTANCE_v3.3.0.md.
