@@ -12,6 +12,7 @@ from .integration_contract import IntegrationRequest, validate_request
 MAX_REASON_LENGTH = 80
 MAX_OBSERVATION_FIELDS = 64
 MAX_FIELD_NAME_LENGTH = 128
+MAX_TEXT_VALUE_LENGTH = 4096
 
 
 @dataclass(frozen=True)
@@ -36,6 +37,8 @@ def diagnose_contract(request: Any) -> ContractDiagnostic:
         return ContractDiagnostic(False, "observation_too_large", "shadow")
     if any(type(k) is not str or not k or len(k) > MAX_FIELD_NAME_LENGTH for k in request.observation):
         return ContractDiagnostic(False, "invalid_observation_keys", "shadow")
+    if any(type(v) is str and len(v) > MAX_TEXT_VALUE_LENGTH for v in request.observation.values()):
+        return ContractDiagnostic(False, "observation_text_too_large", "shadow")
     try:
         result = validate_request(request)
     except (TypeError, ValueError, AttributeError):
