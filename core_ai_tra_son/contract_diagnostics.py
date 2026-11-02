@@ -13,6 +13,7 @@ MAX_REASON_LENGTH = 80
 MAX_OBSERVATION_FIELDS = 64
 MAX_FIELD_NAME_LENGTH = 128
 MAX_TEXT_VALUE_LENGTH = 4096
+MAX_COLLECTION_ITEMS = 256
 
 
 @dataclass(frozen=True)
@@ -39,6 +40,8 @@ def diagnose_contract(request: Any) -> ContractDiagnostic:
         return ContractDiagnostic(False, "invalid_observation_keys", "shadow")
     if any(type(v) is str and len(v) > MAX_TEXT_VALUE_LENGTH for v in request.observation.values()):
         return ContractDiagnostic(False, "observation_text_too_large", "shadow")
+    if any(type(v) in (list, tuple, dict) and len(v) > MAX_COLLECTION_ITEMS for v in request.observation.values()):
+        return ContractDiagnostic(False, "observation_collection_too_large", "shadow")
     try:
         result = validate_request(request)
     except (TypeError, ValueError, AttributeError):
