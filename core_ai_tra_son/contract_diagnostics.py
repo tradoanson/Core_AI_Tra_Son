@@ -10,6 +10,8 @@ from typing import Any
 from .integration_contract import IntegrationRequest, validate_request
 
 MAX_REASON_LENGTH = 80
+MAX_OBSERVATION_FIELDS = 64
+MAX_FIELD_NAME_LENGTH = 128
 
 
 @dataclass(frozen=True)
@@ -22,8 +24,6 @@ class ContractDiagnostic:
 
 def diagnose_contract(request: Any) -> ContractDiagnostic:
     """Fail closed for wrong input types, without reading host resources."""
-    if not isinstance(request, IntegrationRequest):
-        return ContractDiagnostic(False, "invalid_request_type", "shadow")
     if type(request) is not IntegrationRequest:
         return ContractDiagnostic(False, "invalid_request_type", "shadow")
     if type(request.verified) is not bool:
@@ -32,7 +32,9 @@ def diagnose_contract(request: Any) -> ContractDiagnostic:
         return ContractDiagnostic(False, "invalid_metadata_type", "shadow")
     if type(request.observation) is not dict:
         return ContractDiagnostic(False, "invalid_observation_type", "shadow")
-    if any(type(k) is not str for k in request.observation):
+    if len(request.observation) > MAX_OBSERVATION_FIELDS:
+        return ContractDiagnostic(False, "observation_too_large", "shadow")
+    if any(type(k) is not str or not k or len(k) > MAX_FIELD_NAME_LENGTH for k in request.observation):
         return ContractDiagnostic(False, "invalid_observation_keys", "shadow")
     try:
         result = validate_request(request)
