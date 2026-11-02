@@ -16,6 +16,7 @@ MAX_TEXT_VALUE_LENGTH = 4096
 MAX_COLLECTION_ITEMS = 256
 MAX_METADATA_LENGTH = 128
 MAX_BINARY_VALUE_LENGTH = 4096
+MAX_NESTED_DEPTH = 8
 
 
 @dataclass(frozen=True)
@@ -48,6 +49,8 @@ def diagnose_contract(request: Any) -> ContractDiagnostic:
         return ContractDiagnostic(False, "observation_collection_too_large", "shadow")
     if any(type(v) in (bytes, bytearray) and len(v) > MAX_BINARY_VALUE_LENGTH for v in request.observation.values()):
         return ContractDiagnostic(False, "observation_binary_too_large", "shadow")
+    if not _within_nested_depth(request.observation, MAX_NESTED_DEPTH):
+        return ContractDiagnostic(False, "observation_too_deep", "shadow")
     try:
         result = validate_request(request)
     except (TypeError, ValueError, AttributeError):
@@ -56,3 +59,27 @@ def diagnose_contract(request: Any) -> ContractDiagnostic:
     if not isinstance(reason, str) or len(reason) > MAX_REASON_LENGTH:
         return ContractDiagnostic(False, "invalid_reason", "shadow")
     return ContractDiagnostic(result.accepted, reason, "shadow")
+
+
+def _within_nested_depth(value: Any, max_depth: int) -> bool:
+    """Bound nested containers without recursion or evaluating user objects."""
+    stack = [(value, 0)]
+    seen = set()
+    while stack:
+        item, depth = stack.pop()
+        if type(item) not in (dict, list, tuple):
+            continue
+        if depth > max_depth:
+            return False
+        identity = id(item)
+        if identity in seen:
+            continue
+        seen.add(identity)
+        if type(item) is dict:
+            children = item.values()
+        else:
+            children = item
+        for child in children:
+            if type(child) in (dict, list, tuple):
+                stack.append((child, depth + 1))
+    return True
