@@ -15,6 +15,7 @@ MAX_FIELD_NAME_LENGTH = 128
 MAX_TEXT_VALUE_LENGTH = 4096
 MAX_COLLECTION_ITEMS = 256
 MAX_METADATA_LENGTH = 128
+MAX_BINARY_VALUE_LENGTH = 4096
 
 
 @dataclass(frozen=True)
@@ -45,6 +46,8 @@ def diagnose_contract(request: Any) -> ContractDiagnostic:
         return ContractDiagnostic(False, "observation_text_too_large", "shadow")
     if any(type(v) in (list, tuple, dict) and len(v) > MAX_COLLECTION_ITEMS for v in request.observation.values()):
         return ContractDiagnostic(False, "observation_collection_too_large", "shadow")
+    if any(type(v) in (bytes, bytearray) and len(v) > MAX_BINARY_VALUE_LENGTH for v in request.observation.values()):
+        return ContractDiagnostic(False, "observation_binary_too_large", "shadow")
     try:
         result = validate_request(request)
     except (TypeError, ValueError, AttributeError):
