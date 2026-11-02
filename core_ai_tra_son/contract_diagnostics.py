@@ -24,10 +24,16 @@ def diagnose_contract(request: Any) -> ContractDiagnostic:
     """Fail closed for wrong input types, without reading host resources."""
     if not isinstance(request, IntegrationRequest):
         return ContractDiagnostic(False, "invalid_request_type", "shadow")
+    if type(request) is not IntegrationRequest:
+        return ContractDiagnostic(False, "invalid_request_type", "shadow")
     if type(request.verified) is not bool:
         return ContractDiagnostic(False, "invalid_verified_type", "shadow")
-    if not isinstance(request.project, str) or not isinstance(request.contract_version, str):
+    if type(request.project) is not str or type(request.contract_version) is not str:
         return ContractDiagnostic(False, "invalid_metadata_type", "shadow")
+    if type(request.observation) is not dict:
+        return ContractDiagnostic(False, "invalid_observation_type", "shadow")
+    if any(type(k) is not str for k in request.observation):
+        return ContractDiagnostic(False, "invalid_observation_keys", "shadow")
     try:
         result = validate_request(request)
     except (TypeError, ValueError, AttributeError):
