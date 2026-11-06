@@ -16,6 +16,19 @@ Artifacts of original run 41476142102, confirmed non-expired on 2026-11-05:
 
 A second main run 41757245778 generated artifact IDs `13289235367` (wheel, 56,532 bytes) and `13288423011` (Windows EXE, 11,138,551 bytes). **Do not assume these archives are byte-identical**: sizes differ, and no SHA256 has been independently verified. Use one selected, source-provenance-matched build set; document which one.
 
+
+## Artifact provenance audit — 2026-11-06
+GitHub Actions artifact metadata confirms both available runs built from **later main commits**, not the historical v4.0.0 candidate. **Neither artifact set may be represented as a reproducible v4.0.0 release build solely from its filename.**
+
+| Run | Main head SHA | Artifact | GitHub-reported ZIP digest (SHA256) |
+|---|---|---|---|
+| 41476142102 | `2775b9b8091fb755ee432f0497d9e657b6aa6d61` (v5.0.0 merge) | wheel ID 13158540562 | `5894a63748786ad438d3974ae18351ea801d8d837e3a5332fac493aed0f230f4` |
+| 41476142102 | same | Windows EXE ID 13158225825 | `c164c821ef229e4834e6cf6fb31cc66fe8287fb3816714e96b86507f49948c9b` |
+| 41757245778 | `09b36802246d907079030130aee020c16aa55ebe` (post-handoff merge) | wheel ID 13289235367 | `d5602f86e6bf651374256bc127d037aff75a5855d5ac819577523808b5200518` |
+| 41757245778 | same | Windows EXE ID 13288423011 | `20d367e3c00943fe280ff69c2f499a38c9887f918d936a941a1b0f959cbe890f` |
+
+These digests are reported by GitHub's artifact metadata, not independently recomputed after download; the ZIP digest does not establish the wheel/EXE internal-file digest. **Release blocker:** build a fresh wheel and EXE from audited historical commit `3afc90d4f4bb3657acf86a523ae369adbf943f5b`, execute all required acceptance gates against that commit, capture artifact ZIP and internal payload SHA256, and only then tag/publish. The existing green main CI proves workflow health, not historical binary provenance. No real data or live integrations.
+
 ## Maintainer-only release closure
 1. Confirm release commit `3afc90d4f4bb3657acf86a523ae369adbf943f5b` corresponds to the audited v4.0.0 source and selected artifact run. Rebuild from that commit if provenance is uncertain.
 2. Download selected artifact ZIPs via GitHub Actions. Compute SHA256 locally with `Get-FileHash -Algorithm SHA256 <path>` (Windows) or `sha256sum <path>` (Linux); record hashes, sizes, and source run ID in the release notes.
